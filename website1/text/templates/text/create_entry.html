@@ -1,0 +1,54 @@
+
+{% extends 'text/base.html' %}
+{% block title %}Add a New entry{% endblock %}
+{% block logs_active %}active{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+
+      <!-- Top -->
+      <div class="col-sm-12 col-md-3">
+          <div class="panel panel-default">
+              <div class="panel-body">
+                  <h2>{{ log.title }} <small>{{ log.category }}</small></h2>
+                  <h5>created on {{ log.date }}</h5>
+              </div>
+          </div>
+      </div>
+
+        <!-- Right entry Info -->
+        <div class="col-sm-12 col-md-12">
+
+            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                <li role="presentation"><a href="{% url 'text:detail' log.id %}">View All</a></li>
+                <li role="presentation" class="active"><a href="{% url 'text:create_entry' log.id %}">Add New entry</a></li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Add a New entry</h3>
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="log" value="{{ log }}">
+                        {% include 'text/form-template.html' %}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

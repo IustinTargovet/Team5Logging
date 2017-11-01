@@ -1,9 +1,32 @@
 {% extends 'text/base.html' %}
 {%block body%}
-      <h4> Logs: </h4>
-      <ul>
         {% for log in all_logs %}
-          <li><a href = "{% url 'text:detail' log.id  %}">  {{log.title}}</a><br>
+        <div class="col-sm-4 col-lg-2">
+                  <div class="thumbnail">
+                      <h2><a href="{% url 'text:detail' log.id %}">
+                          {{ log.title }}<small>  by {{log.user}}</small>
+                      </a></h2>
+                      <h5>created on: <br> {{log.date}}</h5>
+                      <div class="caption">
+                          <!-- View Details -->
+                          <a href="{% url 'text:detail' log.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+
+                          <!-- Delete Log -->
+                          <form action="{% url 'text:log-delete' log.id%}" method="post" style="display: inline;">
+                              {% csrf_token %}
+                              <input type="hidden" name="log_id" value="{{ log.id }}" />
+                              <button type="submit" class="btn btn-default btn-sm">
+                                  <span class="glyphicon glyphicon-trash"></span>
+                              </button>
+                          </form>
+
+                          <!-- Favorite Log -->
+                          <a href="#" class="btn btn-default btn-sm btn-favorite">
+                              <span class="glyphicon glyphicon-star {% if log.is_favorite %}active{% endif %}"></span>
+                          </a>
+
+                      </div>
+                  </div>
+              </div>
         {% endfor %}
-      </ul>
 {%endblock%}

@@ -2,17 +2,81 @@
 {% block title %} Log entries {% endblock %}
 
 {%block body%}
-<h1> {{log.title}} </h1>
+<div class="container-fluid songs-container">
 
+    <div class="row">
 
+        <!-- Left Album Info -->
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2>{{ log.title }} <small>{{ log.category }}</small></h2>
+                    <h5>created on {{ log.date }}</h5>
+                </div>
+            </div>
+        </div>
 
-  {% csrf_token %}
-  {% for entry in log.entry_set.all %}
-      <h4>{{ entry.title }}</h4> <h5> {{ entry.date }} </h5>
-      <p> {{ entry.text }} </p>
+        <!-- Right Song Info -->
+        <div class="col-sm-12 col-md-12">
 
-    </label><br>
-  {% endfor %}
-  <br><br>
-</form>
+            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                <li role="presentation" class="active"><a href="{% url 'text:detail' log.id %}">View All</a></li>
+                <li role="presentation"><a href="{% url 'text:create_entry' log.id %}">Add Entry</a></li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3>All Entries</h3>
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Favorite</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for entry in log.entry_set.all %}
+                            <tr>
+                                <td>{{ entry.title }}</td>
+                                <td>{{ entry.date }}</td>
+                                <td>
+                                    <a href="#" class="btn-favorite"><span class="glyphicon glyphicon-star {% if entry.is_favorite %}active{% endif %}"></span></a>
+                                </td>
+                                <td>
+                                    <form action="#" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="entry_id" value="{{ entry.id }}" />
+                                        <button type="button" class="btn btn-success btn-xs">
+                                            <span class="glyphicon glyphicon-list"></span>&nbsp; View
+                                        </button>
+                                        <button type="button" class="btn btn-warning btn-xs">
+                                            <span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit
+                                        </button>
+                                        <button type="submit" class="btn btn-danger btn-xs">
+                                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
+                                        </button>
+
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 {%endblock%}
