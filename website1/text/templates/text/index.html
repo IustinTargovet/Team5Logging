@@ -1,0 +1,9 @@
+{% extends 'text/base.html' %}
+{%block body%}
+      <h4> Logs: </h4>
+      <ul>
+        {% for log in all_logs %}
+          <li><a href = "{% url 'text:detail' log.id  %}">  {{log.title}}</a><br>
+        {% endfor %}
+      </ul>
+{%endblock%}

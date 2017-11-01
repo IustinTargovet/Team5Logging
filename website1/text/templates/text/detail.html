@@ -1,0 +1,18 @@
+{% extends 'text/base.html' %}
+{% block title %} Log entries {% endblock %}
+
+{%block body%}
+<h1> {{log.title}} </h1>
+
+
+
+  {% csrf_token %}
+  {% for entry in log.entry_set.all %}
+      <h4>{{ entry.title }}</h4> <h5> {{ entry.date }} </h5>
+      <p> {{ entry.text }} </p>
+
+    </label><br>
+  {% endfor %}
+  <br><br>
+</form>
+{%endblock%}
