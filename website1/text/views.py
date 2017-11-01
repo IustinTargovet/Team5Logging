@@ -54,8 +54,8 @@ def create_entry(request, log_id):
                 return render(request, 'text/create_entry.html', context)
         entry = form.save(commit=False)
         entry.log = log
+        entry.date = now
         context = {'log':log}
-        return render(request, 'text/create_entry.html', context)
         entry.save()
         return render(request, 'text/detail.html', {'log': log})
     context = {
