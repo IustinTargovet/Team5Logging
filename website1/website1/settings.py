@@ -22,6 +22,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'bootstrap3_datetime',
+    'dbbackup',
     'datetimewidget',
     'text',
     'django.contrib.admin',

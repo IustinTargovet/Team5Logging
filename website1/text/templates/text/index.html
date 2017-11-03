@@ -29,4 +29,42 @@
                   </div>
               </div>
         {% endfor %}
+        {% if entries %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Entries</h3>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Entry Title</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                    <th>Log</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in entries %}
+                                    <tr>
+                                      <td>
+                                          <a href="{% url 'text:detail' log.id %}" class="btn-favorite">{{entry.log.title}}</a>
+                                      </td>
+                                        <td>{{ entry.title }}</td>
+                                        <td>{{ entry.log.category }}</td>
+                                        <td>
+                                            {{ entry.date }}
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {%endblock%}

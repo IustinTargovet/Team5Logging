@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from .models import Log, Entry
+from django.db.models import Q
 from .forms import UserForm, LogForm, EntryForm
 import datetime
 
@@ -17,6 +18,13 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         return Log.objects.all()
+
+class EntryView(generic.ListView):
+    template_name = 'text/entry.html'
+    context_object_name = 'all_entries'
+
+    def get_queryset(self):
+        return Entry.objects.all()
 
 class DetailView(generic.DeleteView):
     model = Log
@@ -65,6 +73,16 @@ def create_entry(request, log_id):
     return render(request, 'text/create_entry.html', context)
 
 
+def detail(request, log_id):
+    if not request.user.is_authenticated():
+        return render(request, 'text/login.html')
+    else:
+        user = request.user
+        log = get_object_or_404(Log, pk=log_id)
+        return render(request, 'text/detail.html', {'log': log, 'user': user})
+
+
+
 class EntryCreate(CreateView):
     model = Entry
     fields = ['log', 'title', 'date', 'text']
@@ -104,6 +122,29 @@ class UserFormCreate(View):
                     return redirect('text:index')
 
         return render(request, self.template_name, {'form': form})
+
+def index(request):
+    if not request.user.is_authenticated():
+        return render(request, 'text/login.html')
+    else:
+        logs = Log.objects.filter(user=request.user)
+        entry_results = Entry.objects.all()
+        query = request.GET.get("q")
+        if query:
+            logs = logs.filter(
+                Q(title__icontains=query) |
+                Q(category__icontains=query)
+            ).distinct()
+            entry_results = entry_results.filter(
+                Q(title__icontains=query)
+            ).distinct()
+            return render(request, 'text/index.html', {
+                'logs': logs,
+                'entries': entry_results,
+            })
+        else:
+            return render(request, 'text/index.html', {'logs': logs})
+
 
 
 def login_user(request):

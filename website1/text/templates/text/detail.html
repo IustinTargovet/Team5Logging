@@ -2,81 +2,46 @@
 {% block title %} Log entries {% endblock %}
 
 {%block body%}
-<div class="container-fluid songs-container">
 
-    <div class="row">
-
-        <!-- Left Album Info -->
-        <div class="col-sm-4 col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h2>{{ log.title }} <small>{{ log.category }}</small></h2>
-                    <h5>created on {{ log.date }}</h5>
-                </div>
-            </div>
+<div class="col-sm-12 col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>{{ log.title }} <small>{{ log.category }}</small></h2>
+            <h5>created on {{ log.date }}</h5>
         </div>
-
-        <!-- Right Song Info -->
-        <div class="col-sm-12 col-md-12">
-
-            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+    </div>
+</div>
+<ul class="nav nav-pills" style="margin-bottom: 18px; padding-left: 15px;" >
                 <li role="presentation" class="active"><a href="{% url 'text:detail' log.id %}">View All</a></li>
-                <li role="presentation"><a href="{% url 'text:create_entry' log.id %}">Add Entry</a></li>
+                <li role="presentation"><a href="{% url 'text:create_entry' log.id %}">Add New Entry</a></li>
             </ul>
 
-            <div class="panel panel-default">
-                <div class="panel-body">
+        {% for entry in log.entry_set.all %}
+        <div class="col-sm-6 col-lg-6">
+                  <div class="thumbnail">
+                      <h2>
+                          {{entry.title}} <small>  by {{user}}</small>
+                      </h2>
+                      <h5>created on: <br> {{entry.date}}</h5>
+                      <p>
+                        {{entry.text}}
+                      </p>
+                      <form action="#" method="post" style="display: inline;">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="entry_id" value="{{ entry.id }}" />
+                                  <a href = "#"<button type="button" class="btn btn-success btn-xs">
+                                      <span class="glyphicon glyphicon-list"></span>&nbsp; View
+                                  </button></a>
+                                  <button type="button" class="btn btn-warning btn-xs">
+                                      <span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit
+                                  </button>
+                                  <button type="submit" class="btn btn-danger btn-xs">
+                                      <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
+                                  </button>
 
-                    <h3>All Entries</h3>
+                              </form>
+                  </div>
+              </div>
 
-                    {% if error_message %}
-                        <p><strong>{{ error_message }}</strong></p>
-                    {% endif %}
-
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Date</th>
-                            <th>Favorite</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for entry in log.entry_set.all %}
-                            <tr>
-                                <td>{{ entry.title }}</td>
-                                <td>{{ entry.date }}</td>
-                                <td>
-                                    <a href="#" class="btn-favorite"><span class="glyphicon glyphicon-star {% if entry.is_favorite %}active{% endif %}"></span></a>
-                                </td>
-                                <td>
-                                    <form action="#" method="post" style="display: inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="entry_id" value="{{ entry.id }}" />
-                                        <button type="button" class="btn btn-success btn-xs">
-                                            <span class="glyphicon glyphicon-list"></span>&nbsp; View
-                                        </button>
-                                        <button type="button" class="btn btn-warning btn-xs">
-                                            <span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit
-                                        </button>
-                                        <button type="submit" class="btn btn-danger btn-xs">
-                                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
-                                        </button>
-
-                                    </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+        {% endfor %}
 {%endblock%}

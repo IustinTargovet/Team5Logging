@@ -15,11 +15,13 @@ urlpatterns = [
 
     url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name = 'detail'),
 
-    url(r'log/add/$', views.create_log, name = 'log-add'),
+    url(r'^log/add/$', views.create_log, name = 'log-add'),
 
-    url(r'log/(?P<pk>[0-9]+)/$', views.LogUpdate.as_view(), name = 'log-update'),
+    url(r'^log/(?P<pk>[0-9]+)/$', views.LogUpdate.as_view(), name = 'log-update'),
 
-    url(r'log/(?P<pk>[0-9]+)/delete$', views.LogDelete.as_view(), name = 'log-delete'),
+    url(r'^log/entry_view$', views.EntryView.as_view(), name = 'entry_view'),
+
+    url(r'^log/(?P<pk>[0-9]+)/delete$', views.LogDelete.as_view(), name = 'log-delete'),
 
     url(r'^(?P<log_id>[0-9]+)/create_entry/$', views.create_entry, name='create_entry'),
 ]

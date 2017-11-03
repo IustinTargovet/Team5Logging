@@ -1,0 +1,20 @@
+{% extends 'text/base.html' %}
+{%block body%}
+        {% for entry in all_entries %}
+        <div class="col-sm-12 col-lg-2">
+                  <div class="thumbnail">
+                      <h2>
+                          {{ entry.title }}<small>  by {{entry.log.user}}</small>
+                      </h2>
+                      <h5>entry.text</h5>
+                      <div class="caption">
+                          <!-- back -->
+                          <a href="{% url 'text:detail' %}" class="btn btn-default btn-sm btn-favorite">
+                              <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                          </a>
+
+                      </div>
+                  </div>
+              </div>
+        {% endfor %}
+{%endblock%}
